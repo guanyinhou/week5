@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel='stylesheet'
+        href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css' />
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css' />
+    <link href="https://cdn.jsdelivr.net/npm/vue-loading-overlay@3/dist/vue-loading.css" rel="stylesheet">
+    <link rel="stylesheet" href="./css/all.css">
+</head>
+
+<body>
+    <div id="app">
+        <loading :active.sync="isLoading"></loading>
+        <div class="container">
+
+            <div class="my-5 row justify-content-center">
+                <hr>
+                <div class="prod-area">
+                    <div class="prod" v-for="prod in prods" :key="prod.id">
+                        <div class="prod-frame">
+                            <div class="prod-img">
+                                <img :src="prod.imageUrl"
+                                    :alt="prod.title">
+                            </div>
+                        </div>
+                        <a class="prod-title" href="">{{prod.title}}</a>
+                        <div class="prod-type"><em>{{prod.category}}</em></div>
+                        <div class="prod-content">
+                            {{prod.content}}
+                        </div>
+                        <a href="#" class="cont-read" @click.prevent="getProd(prod.id)" :disabled="status.loadingItem===prod.id">. . . 繼續閱讀
+                            <i class="spinner-grow spinner-grow-sm" v-if="status.loadingItem===prod.id"></i>
+                        </a>
+                        <div class="prod-price">
+                            {{prod.price}}<span class="old">{{prod.origin_price}}</span>
+                            <a href="#" @click.prevent="addToCart(prod.id)"><i class="fa fa-cart-plus"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="modal">
+                    <div class="modal-dialog modal-xl">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <span class="modal-title">{{tempData.title}}</span>
+                                <button class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">X</span></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <aside>
+                                            <div class="form-team show-img">
+                                                <img :src="tempData.imageUrl">
+                                            </div>
+                                        </aside>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <main>
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <div class="form-team">
+                                                        <h3>{{tempData.title}}</h3>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12">
+                                                    <div class="form-team">
+                                                        <em class="float-right">-{{tempData.category}}</em>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12"><hr></div>
+                                                <div class="col-sm-12">
+                                                    <div class="form-team">
+                                                        <p>{{tempData.content}}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12">
+                                                    <div class="form-team">
+                                                        <p>{{tempData.description}}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12">
+                                                    <div class="form-team">
+                                                        <h4 class="prod-price">
+                                                            {{tempData.price}}
+                                                            <span class="old">{{tempData.origin_price}}</span></h4>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12">
+                                                    <div class="form-team">
+                                                        <select v-model="tempData.num" class="form-control">
+                                                            <option value="0" disabled selected>請選擇數量</option>
+                                                            <option :value="num" v-for="num in 10" :key="num">{{num}} {{tempData.unit}}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </main>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <span class="float-left">小計：{{tempData.num*tempData.price}}元</span>
+                                <button class="btn" id="addToCart" @click="addToCart(tempData.id, tempData.num)">加入購物車</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cart-area">
+                    <div class="float-right">
+                        <button class="btn" type="button" @click="rmCartAllItem"><i class="fa fa-trash"></i> 刪除所有品項</button>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>刪除</th>
+                                    <th>品名</th>
+                                    <th>數量</th>
+                                    <th>單位</th>
+                                    <th>單價</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="item in carts" :key="item.product.id + 1">
+                                    <td><button class="btn" @click="rmCartItem(item.product.id)" :disabled="status.loadingNum===item.product.id"><i class="fa fa-trash"></i></button></td>
+                                    <td><a href="#">{{item.product.title}}</a></td>
+                                    <td>
+                                        <div class="input-group">
+                                            <div class="inpuy-group-append">
+                                                <button class="btn" type="button" :disabled="item.quantity===1" @click="item.quantity--; updateQuantity(item.product.id,item.quantity)" :disabled="status.loadingNum===item.product.id"><i class="fa fa-minus"></i></button>
+                                            </div>
+                                            <input type="number" class="form-control text-center" 
+                                            v-model="item.quantity"
+                                            min="1" @change="updateQuantity(item.product.id,item.quantity)" :disabled="status.loadingNum===item.product.id">
+                                            <div class="input-group-prepend">
+                                                <button class="btn" type="button" @click="item.quantity++; updateQuantity(item.product.id,item.quantity)" :disabled="status.loadingNum===item.product.id"><i class="fa fa-plus"></i></button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>{{item.product.unit}}</td>
+                                    <td class="prod-price">{{item.product.price}}</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td class="text-right" colspan="4"><span class="total-word">總計</span></td>
+                                    <td class="text-center prod-price">{{cartTotal}}</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="form-area">
+                    <validation-observer v-slot="{invalid}">
+                        <form @submit.prevent="submit">
+                            <validation-provider rules="required" v-slot="{errors,classes,passed}">
+                                <div class="form-group">
+                                    <label for="receiver">收件人姓名<b class="required">*</b></label>
+                                    <input type="text" name="收件人姓名" v-model="form.receiver" class="form-control" id="receiver" reuqired :class="classes">
+                                    <span class="invalid-feedback">{{errors[0]}}</span>
+                                    <span v-if="passed" class="valid-feedback">沒有問題</span>
+                                </div>
+                            </validation-provider>
+                            <validation-provider rules="required|email" v-slot="{errors,classes,passed}">
+                                <div class="form-group">
+                                    <label for="email">電郵信箱<b class="required">*</b></label>
+                                    <input type="email" name="電郵信箱" v-model="form.email" class="form-control" id="email" reuqired :class="classes">
+                                    <span class="invalid-feedback">{{errors[0]}}</span>
+                                    <span v-if="passed" class="valid-feedback">沒有問題</span>
+                                </div>
+                            </validation-provider>
+                            <validation-provider rules="required|numeric" v-slot="{errors,classes,passed}">
+                                <div class="form-group">
+                                    <label for="tel">聯絡電話<b class="required">*</b></label>
+                                    <input type="tel" name="聯絡電話" v-model="form.tel" class="form-control" id="tel" reuqired :class="classes">
+                                    <span class="invalid-feedback">{{errors[0]}}</span>
+                                    <span v-if="passed" class="valid-feedback">沒有問題</span>
+                                </div>
+                            </validation-provider>
+                            <validation-provider rules="required" v-slot="{errors,classes,passed}">
+                                <div class="form-group">
+                                    <label for="address">收件地址<b class="required">*</b></label>
+                                    <input type="address" name="收件地址" v-model="form.address" class="form-control" id="address" reuqired :class="classes">
+                                    <span class="invalid-feedback">{{errors[0]}}</span>
+                                    <span v-if="passed" class="valid-feedback">沒有問題</span>
+                                </div>
+                            </validation-provider>
+                            <div class="form-group">
+                                <label for="payment">購買方式<b class="required">*</b></label>
+                                <select id="payment" class="form-control" name="購買方式" v-model="form.payment" required>
+                                    <option value="" disabled selected>請選擇</option>
+                                    <option value="credit">Credit</option>
+                                    <option value="applepay">Apple Pay</option>
+                                    <option value="googlepay">Google Pay</option>
+                                    <option value="atm">ATM</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="msg">留言</label>
+                                <textarea type="text" class="form-control" id="msg" v-model="form.msg"></textarea>
+                            </div>
+                            <hr>
+                            <button type="submit" class="btn float-right" :disabled="invalid">送出表單</button>
+                        </form>
+                    </validation-observer>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.js'></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-loading-overlay@3"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/vee-validate/3.3.7/vee-validate.full.min.js'></script>
+    <script src="./js/all.js" type="module"></script>
+</body>
+
+</html>

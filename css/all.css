@@ -1,0 +1,273 @@
+* {
+  font-family: microsoft jhenghei;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+* #app {
+  margin-top: 100px;
+}
+
+* #app .container {
+  max-width: 960px;
+  margin: auto;
+}
+
+* #app .container .prod-area {
+  width: 100%;
+  float: left;
+}
+
+* #app .container .prod-area .prod {
+  float: none;
+  width: 31.333333%;
+  margin: 10px 1% 20px 1%;
+  position: relative;
+  border: 1px solid #ddd;
+  padding: 15px;
+  -webkit-transition: all .4s;
+  transition: all .4s;
+  vertical-align: top;
+  display: inline-block;
+}
+
+* #app .container .prod-area .prod:hover {
+  border-color: #ff4e3d;
+  border-radius: 10px;
+}
+
+* #app .container .prod-area .prod-frame {
+  position: relative;
+  width: 100%;
+  padding-top: 100%;
+}
+
+* #app .container .prod-area .prod-frame .prod-img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  background-position: center;
+  background-size: cover;
+  text-align: center;
+}
+
+* #app .container .prod-area .prod-frame .prod-img img {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+* #app .container .prod-area .prod-title {
+  font-weight: bold;
+  font-size: 20px;
+  text-decoration: none;
+  color: #000;
+}
+
+* #app .container .prod-area .prod-type {
+  text-align: right;
+  margin-bottom: 10px;
+}
+
+* #app .container .prod-area .prod-type:before {
+  content: '- ';
+}
+
+* #app .container .prod-area .prod .prod-content {
+  height: 78px;
+  overflow: hidden;
+  color: #333;
+  margin-bottom: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #ddd;
+}
+
+* #app .container .prod-area .prod .cont-read {
+  position: absolute;
+  right: 15px;
+  bottom: 65px;
+  background-color: #fff;
+  padding-left: 5px;
+  text-decoration: none;
+}
+
+* #app .container .prod-area .prod .prod-price a {
+  float: right;
+  border-radius: 100%;
+  background-color: #ff4e3d;
+  width: 32px;
+  height: 32px;
+  text-align: center;
+  line-height: 28px;
+  font-size: 16px;
+  color: #fff;
+  -webkit-transition: all .4s;
+  transition: all .4s;
+}
+
+* #app .container .prod-area .prod .prod-price a:focus, * #app .container .prod-area .prod .prod-price a:hover {
+  background-color: #992e24;
+}
+
+* #app .container .cart-area {
+  width: 100%;
+  margin: 100px 0;
+}
+
+* #app .container .cart-area table thead tr th {
+  text-align: center;
+}
+
+* #app .container .cart-area table tbody tr td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+* #app .container .cart-area table tbody tr td .input-group {
+  width: 200px;
+  margin: auto;
+}
+
+* #app .container .cart-area table tfoot .total-word {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+* #app .container .form-area {
+  width: 100%;
+}
+
+* #app .container .modal .modal-header {
+  padding: 20px;
+  background-color: #b074a9;
+  color: #fff;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+* #app .container .modal .modal-header .close {
+  cursor: pointer;
+}
+
+* #app .container .modal .modal-body {
+  padding: 20px;
+  background-color: #fff;
+}
+
+* #app .container .modal .modal-body label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+* #app .container .modal .modal-body textarea, * #app .container .modal .modal-body input:not([type="checkbox"]) {
+  width: 100%;
+  height: 36px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 5px 10px;
+}
+
+* #app .container .modal .modal-body textarea {
+  height: auto;
+  min-height: 72px;
+}
+
+* #app .container .modal .modal-footer {
+  border-top: 1px solid #ddd;
+  padding: 20px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  background-color: #fff;
+}
+
+* #app .container .modal .modal-footer span {
+  position: absolute;
+  left: 20px;
+}
+
+* #app .container .modal .form-team {
+  margin-bottom: 15px;
+}
+
+* #app .container .modal .form-team.show-img {
+  position: relative;
+  width: 100%;
+  padding-top: 100%;
+}
+
+* #app .container .modal .form-team.show-img img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+* #app .container .modal .ckbox label {
+  display: inline-block;
+}
+
+* #app .container .btn {
+  border: 0;
+  border-radius: 4px;
+  padding: 7px 14px;
+  color: #fff;
+  background-color: #ff4e3d;
+  cursor: pointer;
+  -webkit-transition: all .4s;
+  transition: all .4s;
+}
+
+* #app .container .btn:hover, * #app .container .btn:focus {
+  background-color: #992e24;
+}
+
+* #app .container .prod-price .old:before, * #app .container .prod-price:before {
+  content: '$ ';
+}
+
+* .hidden {
+  display: none;
+}
+
+* hr {
+  width: 100%;
+}
+
+* .clearfix {
+  clear: both;
+}
+
+* .prod-price {
+  color: red;
+  font-size: 24px;
+  position: relative;
+  border-top: 1px solid #ddd;
+  padding-top: 10px;
+  height: 30px;
+}
+
+* .prod-price .old {
+  color: #bbb;
+  font-size: 18px;
+  text-decoration: line-through;
+  margin-left: 15px;
+}
+
+* .valid-feedback {
+  color: green;
+}
+
+* .required {
+  color: red;
+}
+/*# sourceMappingURL=all.css.map */
